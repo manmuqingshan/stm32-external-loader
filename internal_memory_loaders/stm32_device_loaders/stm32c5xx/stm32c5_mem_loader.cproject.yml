@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Open-CMSIS-Pack/devtools/schemas/projmgr/2.11.0/tools/projmgr/schemas/cproject.schema.json
+project:
+  components:
+    - component: ARM::CMSIS:CORE
+    - component: STMicroelectronics::Utility:Loader:Common
+    - component: STMicroelectronics::Utility:Loader:ST
+    - component: STMicroelectronics::Utility:Loader:IAR
+    - component: STMicroelectronics::Utility:Loader:Keil
+  define:
+    - USE_STDPERIPH_DRIVER
+    - keil
+    - ST
+    - IAR
+  groups:
+    - group: Device memory controller
+      files:
+        - file: ./memory_controller/stm32c5_memory_controller.c
+        - file: ./memory_controller/stm32c5_memory_controller.h
+        - file: ./memory_controller/stm32c5_hw.h
+    - group: Device Flash Driver
+      files:
+        - file: ./stm32c5_device_loader.c
+        - file: ./stm32c5_device_desc.h

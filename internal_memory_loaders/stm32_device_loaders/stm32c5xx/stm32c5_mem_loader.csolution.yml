@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Open-CMSIS-Pack/devtools/schemas/projmgr/2.11.0/tools/projmgr/schemas/csolution.schema.json
+solution:
+  optimize: size
+  debug: on
+  target-types:
+    - type: STM32C5_0x44E_0x08000000_512K
+      device: ARMCM33
+      define: [ STM32C5_0x44E_0x08000000_512K, RELOCATABLE_FLASHLOADER]
+    - type: STM32C5_0x44F_0x08000000_256K
+      device: ARMCM33
+      define: [ STM32C5_0x44F_0x08000000_256K, RELOCATABLE_FLASHLOADER]
+  build-types:
+    - type: IAR
+      compiler: IAR
+      misc:
+        - ASM:
+          - -t8
+          - -s+
+          - -M<>
+          - -w+
+        - C:
+          - -e
+          - --ropi
+          - --rwpi
+          - --no_rw_dynamic_init
+          - '-DDEVICE_DESC_HEADER=\\"stm32c5_device_desc.h\\"'
+          - --diag_suppress Og014
+        - Link:
+          - --vfe
+          - --no_entry
+          -  --inline
+          - --diag_suppress Lp005
+          - --map
+          - ../../build/$BuildType$+$TargetType$/$Project$.map
+          - --config_def RAM_SIZE=0x4000
+  output-dirs:
+    outdir: ./build/$BuildType$+$TargetType$
+  packs:
+    - pack: ARM::CMSIS@5.9.0
+    - pack: STMicroelectronics::stm32_mem_loader
+      path: ../../stm32_mem_loader
+  projects:
+    - project: ./stm32c5_mem_loader.cproject.yml

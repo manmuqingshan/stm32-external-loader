@@ -1,0 +1,41 @@
+/**
+  **********************************************************************************************************************
+  * @file    mem_loader.icf
+  * @brief   IAR EWARM linker script for the STM32 memory loader.
+  *
+  **********************************************************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  **********************************************************************************************************************
+  */
+define memory mem with size = 4G;
+define symbol __RAM_size__=RAM_SIZE;
+define region RAM_REGION  = mem:[from 0x0 size __RAM_size__];
+define region RAM_REGION2 = mem:[from __RAM_size__ size 0x100];
+
+define block CSTACK     with alignment = 8, size = 0x100 { };
+define block .noinit {};
+
+"PrgCode": place in RAM_REGION  { block SB {
+                                first symbol FlashInitEntry,
+                                ro,
+                                rw,
+                                block .noinit,
+                                block CSTACK
+                              } };
+
+
+"DevInfo": place in RAM_REGION {
+  object keil_mem_loader_desc.o
+};
+
+"DevDscr": place in RAM_REGION {
+  object stm32_mem_loader_desc.o
+};

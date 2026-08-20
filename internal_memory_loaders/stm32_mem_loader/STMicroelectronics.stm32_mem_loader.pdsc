@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stm32="https://developer.st.com/schemas/stm32cube/1.0.0" schemaVersion="1.7.55" xsi:noNamespaceSchemaLocation="PACK.xsd" xsi:schemaLocation="https://developer.st.com/schemas/stm32cube/1.0.0 stm32cube.xsd">
+  <vendor>STMicroelectronics</vendor>
+  <name>stm32_mem_loader</name>
+  <description>Pack with unified STM32 memory loader infrastructure for IAR, Keil and ST</description>
+  <url>https://developer.st.com/st-pack-server/api/v1/pack/</url>
+  <repository type="git">https://github.com/STMicroelectronics/stm32-memory-loaders</repository>
+  <license>LICENSE.md</license>
+  <releases>
+    <release version="1.0.0" date="2026-08-14">
+      Initial release of the device-independent STM32 memory loader pack with a unified mem_loader API,
+      supports using ICCARM.
+    </release>
+  </releases>
+  <keywords>
+    <keyword>STMicroelectronics</keyword>
+    <keyword>ST</keyword>
+    <keyword>STM32</keyword>
+    <keyword>flashloader</keyword>
+    <keyword>mem_loader</keyword>
+  </keywords>
+  <conditions>
+    <condition id="Compiler ARMCC">
+      <require Tcompiler="ARMCC" />
+    </condition>
+    <condition id="Compiler GCC">
+      <require Tcompiler="GCC" />
+    </condition>
+    <condition id="Compiler IAR">
+      <require Tcompiler="IAR" />
+    </condition>
+    <condition id="IAR Loader">
+      <require Cclass="Utility" Cgroup="Loader" Csub="Common" />
+    </condition>
+    <condition id="Keil Loader">
+      <require Cclass="Utility" Cgroup="Loader" Csub="Common" />
+    </condition>
+    <condition id="ST Loader">
+      <require Cclass="Utility" Cgroup="Loader" Csub="Common" />
+    </condition>
+  </conditions>
+  <components>
+    <component Cclass="Utility" Cgroup="Loader" Csub="Common" Cversion="1.0.0">
+      <description>Memory Loader Common API</description>
+      <files>
+        <file category="header" name="common/device_loader.h" />
+        <file category="source" name="common/mem_loader_common.c" />
+        <file category="linkerScript" name="common/linker/iar/mem_loader.icf" attr="config" version="1.0.0"
+          condition="Compiler IAR" />
+      </files>
+    </component>
+    <component Cclass="Utility" Cgroup="Loader" Csub="IAR" Cversion="1.0.0"
+      condition="IAR Loader">
+      <description>ST Memory Loader API</description>
+      <files>
+        <file category="header" name="iar/mem_loader_config.h" />
+        <file category="source" name="iar/mem_loader_entry.c" />
+        <file category="header" name="iar/mem_loader_extra.h" />
+        <file category="source" name="iar/mem_loader_glue.c" />
+        <file category="source" name="iar/ewarm_mem_loader.c" />
+        <file category="header" name="iar/ewarm_mem_loader.h" />
+      </files>
+    </component>
+    <component Cclass="Utility" Cgroup="Loader" Csub="Keil" Cversion="1.0.0"
+    condition="Keil Loader">
+      <description>Keil Memory Loader API</description>
+      <files>
+        <file category="source" name="keil/keil_mem_loader.c" />
+        <file category="source" name="keil/keil_mem_loader_desc.c" />
+        <file category="header" name="keil/keil_mem_loader.h" />
+      </files>
+    </component>
+    <component Cclass="Utility" Cgroup="Loader" Csub="ST" Cversion="1.0.0"
+    condition="ST Loader">
+      <description>ST Memory Loader API</description>
+      <files>
+        <file category="source" name="st/stm32_mem_loader.c" />
+        <file category="source" name="st/stm32_mem_loader_desc.c" />
+        <file category="header" name="st/stm32_mem_loader_desc.h" />
+      </files>
+    </component>
+  </components>
+</package>
